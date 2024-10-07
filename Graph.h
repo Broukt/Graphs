@@ -1,5 +1,7 @@
 #pragma once
 #include "Node.h"
+#include <malloc.h>
+#include <iostream>
 
 class Graph
 {
@@ -14,8 +16,8 @@ public:
 	~Graph();
 
 	void add_vertex();
-	void add_edge(int, int);
-	void remove_edge(int, int);
+	bool add_edge(int, int);
+	bool remove_edge(int, int);
 	void print_graph();
 
 	void expand_adj_list();
