@@ -36,6 +36,22 @@ bool Graph::add_edge(int src, int dest)
 	return true;
 }
 
+bool Graph::add_edge_undirected(int src, int dest)
+{
+	if (src < 0 || src >= this->num_vertices || dest < 0 || dest >= this->num_vertices)
+		return false;
+
+	Node* new_node = new Node(dest);
+	new_node->set_next(this->adj_list[src]);
+	this->adj_list[src] = new_node;
+
+	new_node = new Node(src);
+	new_node->set_next(this->adj_list[dest]);
+	this->adj_list[dest] = new_node;
+
+	return true;
+}
+
 bool Graph::remove_edge(int src, int dest)
 {
 	if (src < 0 || src >= this->num_vertices || dest < 0 || dest >= this->num_vertices)
@@ -80,6 +96,121 @@ void Graph::print_graph()
 
 		std::cout << std::endl;
 	}
+}
+
+void Graph::bfs(int start)
+{
+	if (start >= this->num_vertices || start < 0)
+		return;
+
+	bool* visited = (bool*)calloc(this->num_vertices, sizeof(bool));
+	std::queue<int> q;
+
+	visited[start] = true;
+	q.push(start);
+
+	while (!q.empty())
+	{
+		int current = q.front();
+		q.pop();
+
+		std::cout << current << " ";
+
+		Node* temp = this->adj_list[current];
+
+		while (temp)
+		{
+			if (!visited[temp->get_data()])
+			{
+				visited[temp->get_data()] = true;
+				q.push(temp->get_data());
+			}
+
+			temp = temp->get_next();
+		}
+	}
+	free(visited);
+}
+
+void Graph::dfs(int start)
+{
+	if (start >= this->num_vertices || start < 0)
+		return;
+
+	bool* visited = (bool*)calloc(this->num_vertices, sizeof(bool));
+	std::stack<int> s;
+
+	visited[start] = true;
+	s.push(start);
+
+	while (!s.empty())
+	{
+		int current = s.top();
+		s.pop();
+
+		std::cout << current << " ";
+
+		Node* temp = this->adj_list[current];
+
+		while (temp)
+		{
+			if (!visited[temp->get_data()])
+			{
+				visited[temp->get_data()] = true;
+				s.push(temp->get_data());
+			}
+
+			temp = temp->get_next();
+		}
+	}
+	free(visited);
+}
+
+void Graph::dijkstra(int start)
+{
+	if (start >= this->num_vertices || start < 0)
+		return;
+
+	int* distance = (int*)calloc(this->num_vertices, sizeof(int));
+	bool* visited = (bool*)calloc(this->num_vertices, sizeof(bool));
+
+	for (int i = 0; i < this->num_vertices; i++)
+		distance[i] = INT_MAX;
+
+	distance[start] = 0;
+
+	for (int i = 0; i < this->num_vertices - 1; i++)
+	{
+		int min = INT_MAX;
+		int min_index = -1;
+
+		for (int j = 0; j < this->num_vertices; j++)
+		{
+			if (!visited[j] && distance[j] <= min)
+			{
+				min = distance[j];
+				min_index = j;
+			}
+		}
+
+		visited[min_index] = true;
+
+		Node* temp = this->adj_list[min_index];
+
+		while (temp)
+		{
+			if (!visited[temp->get_data()] && distance[min_index] != INT_MAX && distance[min_index] + 1 < distance[temp->get_data()])
+				distance[temp->get_data()] = distance[min_index] + 1;
+
+			temp = temp->get_next();
+		}
+	}
+
+	for (int i = 0; i < this->num_vertices; i++)
+		std::cout << i << " -> " << distance[i] << std::endl;
+
+	free(distance);
+	free(visited);
 }
 
 void Graph::expand_adj_list()

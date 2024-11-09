@@ -2,6 +2,8 @@
 #include "Node.h"
 #include <malloc.h>
 #include <iostream>
+#include <queue>
+#include <stack>
 
 /// <summary>
 /// Entidad que representa un grafo
@@ -50,6 +52,13 @@ public:
 	/// <returns>True si se pudo agregar la arista, false en caso contrario</returns>
 	bool add_edge(int, int);
 	/// <summary>
+	/// Agrega una arista no dirigida al grafo
+	/// </summary>
+	/// <param name="src">Vértice de origen</param>
+	/// <param name="dest">Vértice de destino</param>
+	/// <returns>True si se pudo agregar la arista, false en caso contrario</returns>
+	bool add_edge_undirected(int, int);
+	/// <summary>
 	/// Elimina una arista del grafo
 	/// </summary>
 	/// <param name="src">Vértice de origen</param>
@@ -60,6 +69,22 @@ public:
 	/// Imprime el grafo
 	/// </summary>
 	void print_graph();
+	
+	/// <summary>
+	/// Realiza un recorrido en anchura
+	/// </summary>
+	/// <param name="start">Vértice de inicio</param>
+	void bfs(int);
+	/// <summary>
+	/// Realiza un recorrido en profundidad
+	/// </summary>
+	/// <param name="start">Vértice de inicio</param>
+	void dfs(int);
+	/// <summary>
+	/// Realiza un recorrido utilizando el algoritmo de Dijkstra
+	/// </summary>
+	/// <param name="start">Vértice de inicio</param>
+	void dijkstra(int);
 
 	/// <summary>
 	/// Expande la lista de adyacencia
